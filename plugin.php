@@ -1,30 +1,50 @@
 <?php
 
 /**
- * Plugin Name: Plugin Name
- * Description: Informative short plugin description.
- * Plugin Version: 0.1
- * Author: Author Name
- * Author URI: http://example.com
+ * Plugin Name: Toolbox WordPress Plugin
+ * Description: This is a WordPress plugin template, a PSR-* compliant structure and Toolbox consistent libraries to power up any kind of WordPress plugin.
+ * Version: 0.2.0
+ * Author: Toolbox
+ * Author URI: http://itsmikita.com
  */
+
+require "autoload.php";
+
+use Toolbox\Plugin;
+use Toolbox\Settings;
 
 /**
- * Quickstart:
+ * Example 1:
  *
- * 1. Change Plugin_Name to your unique plugin namespace
- * 2. Update namespace in src/Autoloader.php
- * 3. Create classes in src/ and hook them up here. Plugin_Name\Autoloader 
- *    class expects to be found in src/Plugin_Name/Autoloader.php file.
+ * Load plugin i18n
  */
+add_action( 'init', function() {
+	load_plugin_textdomain( Plugin::TEXTDOMAIN, false, dirname( __FILE__ ) . "/languages" );
+} );
 
-use Plugin_Name\Autoloader;
-//use Plugin_Name\Your_Class;
+/**
+ * Example 2:
+ *
+ * Add admin scripts and styles
+ */
+add_action( 'admin_enqueue_scripts', function() {
+	wp_enqueue_script( 'toolbox', Plugin::getUrl( 'assets/scripts/admin/toolbox.js' ), [ 'jquery' ] );
+	wp_enqueue_style( 'toolbox', Plugin::getUrl( 'assets/styles/admin/toolbox.css' ) );
+} );
 
-require_once "src/Autoloader.php";
-
-Autoloader::register();
-//Your_Class::yourRules();
-
-//add_action( 'init', function() {
-//	Your_Class::doThingsOnInit();
-//} );
+/**
+ * Example 3:
+ *
+ * Add options page
+ */
+add_action( 'admin_menu', function() {
+	Settings::addPage( [
+		'slug' => "toolbox",
+		'name' => 
+	] );
+	
+	add_action( 'admin_init', function() {
+		
+		
+	} );
+} );
