@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Toolbox WordPress Plugin
  * Description: This is a WordPress plugin template, a PSR-* compliant structure and Toolbox consistent libraries to power up any kind of WordPress plugin.
- * Version: 0.2.2
+ * Version: 0.2.3
  * Author: Toolbox
  * Author URI: http://itsmikita.com
  */
