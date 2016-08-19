@@ -3,6 +3,9 @@ A simple WordPress plugin template. PSR-* compliant architecture. Essential Tool
 
 ChangeLog
 ---------
+**0.2.5**
+- Added sample Settings to demonstrate `Toolbox\Settings` class
+
 **0.2.3**
 - Fixed `Toolbox\Plugin` class reference
 
