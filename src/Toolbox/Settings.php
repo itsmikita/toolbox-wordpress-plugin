@@ -13,7 +13,7 @@ class Settings extends Singleton
 	 */
 	public static function addPage( $page )
 	{
-		$settings = self::getInstance();
+		$settings = self::get();
 		$defaults = [
 			'slug' => "",
 			'title' => "",
@@ -46,11 +46,11 @@ class Settings extends Singleton
 	 */
 	public static function addTab( $tab )
 	{
-		$settings = self::getInstance();
+		$settings = self::get();
 		$defaults = [
 			'page' => "",
 			'name' => "general",
-			'title' => __( "General", Config::TEXTDOMAIN ),
+			'title' => "General",
 			'sections' => [],
 			'saveButton' => true,
 			'class' => ""
@@ -71,7 +71,7 @@ class Settings extends Singleton
 	 */
 	public static function addSection( $section )
 	{
-		$settings = self::getInstance();
+		$settings = self::get();
 		$defaults = [
 			'page' => null,
 			'tab' => "general",
@@ -112,7 +112,7 @@ class Settings extends Singleton
 	 */
 	public static function addField( $setting )
 	{
-		$settings = self::getInstance();
+		$settings = self::get();
 		$defaults = [
 			'page' => null,
 			'tab' => "general",
@@ -150,7 +150,7 @@ class Settings extends Singleton
 	 */
 	public static function displayPage() 
 	{
-		$settings = self::getInstance();
+		$settings = self::get();
 		
 		if( ! isset( $_REQUEST['page'] ) || empty( $settings->pages[ $_REQUEST['page'] ] ) )
 			return;
@@ -159,6 +159,7 @@ class Settings extends Singleton
 			$_REQUEST['tab'] = "general";
 		
 		$title = $settings->pages[ $_REQUEST['page'] ]['title'];
+		$slug = $settings->pages[ $_REQUEST['page'] ]['slug'];
 		$currentTab = $settings->pages[ $_REQUEST['page'] ]['tabs'][ $_REQUEST['tab'] ];
 		$saveButton = $currentTab['saveButton'];
 		
@@ -177,12 +178,12 @@ class Settings extends Singleton
 		$sections = array_map( function( $section ) {
 			$section['fields'] = array_map( function( $field ) {
 				if( ! empty( $field['name'] ) )
-					$field['value'] = Config::get( $field['name'] );
+					$field['value'] = get_option( $field['name'] );
 				
 				if( ! empty( $field['options'] ) )
 					$field['options'] = array_map( function( $option ) use( $field ) {
 						if( isset( $option['name'] ) )
-							$option['checked'] = ( 1 == Config::get( $option['name'] ) );
+							$option['checked'] = ( 1 == get_option( $option['name'] ) );
 						elseif( isset( $field['value'] ) )
 							$option['selected'] =
 							$option['checked'] = ( $option['value'] == $field['value'] );
@@ -191,7 +192,7 @@ class Settings extends Singleton
 					}, $field['options'] );
 				
 				if( "checkbox" == $field['type'] )
-					$field['checked'] = ( 1 == Config::get( $field['name'] ) );
+					$field['checked'] = ( 1 == get_option( $field['name'] ) );
 				
 				if( empty( $field[ $field['type'] ] ) )
 					$field[ $field['type'] ] = true;
@@ -209,7 +210,7 @@ class Settings extends Singleton
 		settings_fields( $_REQUEST['page'] );
 		
 		$hidden = ob_get_clean();
-		$page = compact( 'title', 'hasTabs', 'tabs', 'hidden', 'sections', 'saveButton' );
+		$page = compact( 'title', 'slug', 'hasTabs', 'tabs', 'hidden', 'sections', 'saveButton' );
 		$mustache = Plugin::getMustache();
 		
 		print $mustache->render( 'admin/settings', $page );
@@ -227,7 +228,7 @@ class Settings extends Singleton
 		if( empty( $_REQUEST['option_page'] ) )
 			return $value;
 		
-		$settings = self::getInstance();
+		$settings = self::get();
 		$pages = array_keys( $settings->pages );
 		$name = $_REQUEST['option_page'];
 		
