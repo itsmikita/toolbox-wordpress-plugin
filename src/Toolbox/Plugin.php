@@ -11,7 +11,7 @@ class Plugin
 	 */
 	static public function getPath( $path = '' )
 	{
-		return plugin_dir_path( dirname( __FILE__ ) ) . ltrim( $path, '/' );
+		return plugin_dir_path( dirname( dirname( __FILE__ ) ) ) . ltrim( $path, '/' );
 	}
 	
 	/**
@@ -21,7 +21,7 @@ class Plugin
 	 */
 	static public function getUrl( $path = '' )
 	{
-		return plugins_url( $path, dirname( __FILE__ ) );
+		return plugins_url( $path, dirname( dirname( __FILE__ ) ) );
 	}
 	
 	
